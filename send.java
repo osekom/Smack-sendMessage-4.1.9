@@ -29,17 +29,24 @@ public class send {
 		 * Se obtinen los parametros necesarios para enviar el mensjase
 		 * 
 		 * user 	= usuario;
-		 * message  = mensaje;
-		 * 
+		 * message  	= mensaje;
+		 *
 		 * */
+		
+	String servicio		= "tu_servicio";
+	String servidor		= "tu_servidor";
+	String userAdmin	= "tu_user_admin";
+	String userPass		= "tu_user_pass";
+	int    Puerto		= 5222; // puerto por defecto para conecciones no seguras modifica en dado sea tu uso.
+	
 
 	// Crea la coneccion especifica con el host y el puerto.
 	XMPPTCPConnectionConfiguration config = XMPPTCPConnectionConfiguration.builder()
-	  .setDebuggerEnabled(false)
+	  .setDebuggerEnabled(true)
 	  .setSecurityMode(ConnectionConfiguration.SecurityMode.disabled)
-	  .setServiceName("tu_servicio")
-	  .setHost("tu_server")
-	  .setPort("tu_puerto")
+	  .setServiceName(servicio)
+	  .setHost(servidor)
+	  .setPort(puerto)
 	  .build();
 	
 	// Crea el objeto de coneccion.
@@ -50,11 +57,11 @@ public class send {
         SASLAuthentication.unBlacklistSASLMechanism("PLAIN"); 
 		try {
 			conn2.connect();
-			conn2.login("usuario","pass");
+			conn2.login( userAdmin , userPass);
 			System.out.println("listo te has conectado!!");
 			ChatManager chatmanager = ChatManager.getInstanceFor(conn2);
 	        //Create chat
-	        Chat newChat = chatmanager.createChat(user + "@server", new ChatMessageListener() {
+	        Chat newChat = chatmanager.createChat(user + "@" + server, new ChatMessageListener() {
 	            public void processMessage(Chat chat, Message message) {
 	                try {
 	                    chat.sendMessage(message);
@@ -65,8 +72,10 @@ public class send {
 	            }
 	        });
 
-	       newChat.sendMessage(message);
-	       System.out.println("mensjae enviado!");
+	       	newChat.sendMessage(message);
+	       	System.out.println("mensaje enviado!");
+		conn2.disconnect();
+		System.out.print("Desconectado!");
 			
 		} catch (SmackException e) {
 			System.out.println("Error en conecion con el Servidor XMPP");
