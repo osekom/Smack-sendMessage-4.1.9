@@ -1,7 +1,6 @@
 
 /**
 *
-* @author autorenova.com
 * @dev	  4Jay
 * 
 */
